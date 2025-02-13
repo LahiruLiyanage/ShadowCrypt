@@ -37,6 +37,7 @@ java main.m.ShadowCryptUI
 ```
 ShadowCrypt/
 │── src/
+│   │── main/m/ShadowCryptUI.java
 │   └── main/m/ShadowCryptUI.java
 │── target/  # Place files here to encrypt
 │── README.md
@@ -54,9 +55,17 @@ This tool is intended for educational and personal security purposes only. Use i
 Feel free to fork this repository and improve its capabilities. PRs are welcome!
 
 ## 📜 License
-This project is licensed under the MIT License.
+This project is licensed under the [MIT License](LICENCE.txt).
+
+## 📩 Contact
+
+For any questions or feedback, feel free to reach out:
+
+- Mobile: [+94719607296](+94719607296)
+- Email: [lhlahiru95@gmail.com](lhlahiru95@gmail.com)
+- LinkedIn: [LahiruLiyanage](https://www.linkedin.com/in/liyanage-lahiru/)
+- GitHub: [@LahiruLiyanage](https://github.com/LahiruLiyanage)
+
+## 🔗 Stay secure with ShadowCrypt! ##
 
 ---
-
-🔗 **Stay secure with ShadowCrypt!**
-
