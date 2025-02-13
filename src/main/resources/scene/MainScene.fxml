@@ -1,72 +1,67 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.PasswordField?>
+<?import javafx.scene.control.ProgressBar?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<AnchorPane xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="lk.ijse.dep13.shadowcrypt.controller.MainSceneController"
-            prefHeight="400.0" prefWidth="600.0">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.dep13.shadowcrypt.controller.MainSceneController">
 
-    <VBox spacing="15"
-          AnchorPane.topAnchor="20.0"
-          AnchorPane.leftAnchor="20.0"
-          AnchorPane.rightAnchor="20.0"
-          style="-fx-background-color: #f4f4f4;">
+    <VBox fillWidth="false" spacing="15" style="-fx-background-color: #f4f4f4;" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
 
-        <Label text="ShadowCrypt File Encryption"
-               style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+        <Label alignment="CENTER" prefHeight="64.0" prefWidth="560.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="ShadowCrypt File Encryption">
+         <font>
+            <Font size="16.0" />
+         </font></Label>
 
-        <VBox spacing="5">
-            <Label text="Select File:"/>
-            <HBox spacing="10">
-                <TextField fx:id="txtFilePath"
-                           prefWidth="430"
-                           editable="false"
-                           promptText="No file selected"/>
-                <Button fx:id="btnBrowse"
-                        text="Browse"
-                        onAction="#btnBrowseOnAction"/>
+        <VBox prefHeight="51.0" prefWidth="540.0" spacing="5">
+            <Label text="Select File:">
+            <font>
+               <Font size="16.0" />
+            </font></Label>
+            <HBox alignment="CENTER" prefHeight="39.0" prefWidth="540.0" spacing="10">
+                <TextField fx:id="txtFilePath" editable="false" prefHeight="30.0" prefWidth="463.0" promptText="No file selected" />
+                <Button fx:id="btnBrowse" onAction="#btnBrowseOnAction" prefHeight="30.0" prefWidth="120.0" text="Browse">
+               <font>
+                  <Font size="16.0" />
+               </font></Button>
             </HBox>
         </VBox>
 
         <VBox spacing="5">
-            <Label text="Password:"/>
-            <PasswordField fx:id="txtPassword"
-                           promptText="Enter password"/>
+            <Label text="Password:">
+            <font>
+               <Font size="16.0" />
+            </font></Label>
+            <PasswordField fx:id="txtPassword" prefHeight="30.0" prefWidth="564.0" promptText="Enter password" />
         </VBox>
 
-        <VBox spacing="5">
-            <Label text="Confirm Password:"/>
-            <PasswordField fx:id="txtConfirmPassword"
-                           promptText="Confirm password"/>
-        </VBox>
-
-        <HBox spacing="10" alignment="CENTER">
-            <Button fx:id="btnEncrypt"
-                    text="Encrypt File"
-                    prefWidth="150"
-                    styleClass="button-success"
-                    onAction="#btnEncryptOnAction"/>
-            <Button fx:id="btnDecrypt"
-                    text="Decrypt File"
-                    prefWidth="150"
-                    styleClass="button-primary"
-                    onAction="#btnDecryptOnAction"/>
+        <HBox alignment="CENTER" prefHeight="75.0" prefWidth="560.0" spacing="50.0">
+            <Button fx:id="btnEncrypt" onAction="#btnEncryptOnAction" prefHeight="50.0" prefWidth="150" styleClass="button-success" text="Encrypt File">
+            <font>
+               <Font name="System Bold" size="16.0" />
+            </font></Button>
+            <Button fx:id="btnDecrypt" onAction="#btnDecryptOnAction" prefHeight="50.0" prefWidth="150" styleClass="button-primary" text="Decrypt File">
+            <font>
+               <Font name="System Bold" size="16.0" />
+            </font></Button>
         </HBox>
 
-        <ProgressBar fx:id="prgProgress"
-                     progress="0.0"
-                     visible="false"
-                     prefWidth="Infinity"/>
+        <ProgressBar fx:id="prgProgress" prefHeight="28.0" prefWidth="547.0" progress="0.0" visible="false">
+         <padding>
+            <Insets left="10.0" right="10.0" />
+         </padding></ProgressBar>
 
-        <Label fx:id="lblStatus"
-               wrapText="true"
-               style="-fx-text-fill: #666;"/>
+        <Label fx:id="lblStatus" style="-fx-text-fill: #666;" wrapText="true" />
+      <padding>
+         <Insets left="10.0" right="10.0" />
+      </padding>
 
     </VBox>
 </AnchorPane>
