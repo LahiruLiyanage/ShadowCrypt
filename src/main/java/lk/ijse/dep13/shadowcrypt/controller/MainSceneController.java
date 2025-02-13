@@ -92,5 +92,43 @@ public class MainSceneController {
         prgProgress.setVisible(false);
     }
 
+    private void decrypt(File source, String password) throws IOException {
+        String decryptedName = source.getName().replace(".encrypted", "");
+        File target = new File(source.getParent(), decryptedName);
+        prgProgress.setVisible(true);
+
+        try (FileInputStream fis = new FileInputStream(source);
+             FileOutputStream fos = new FileOutputStream(target)) {
+
+            // Read and verify password
+            byte[] storedPassword = new byte[password.length()];
+            if (fis.read(storedPassword) != password.length() ||
+                    !password.equals(new String(storedPassword))) {
+                throw new IOException("Invalid password!");
+            }
+
+            byte[] buffer = new byte[1024];
+            int read;
+            long totalBytes = source.length() - password.length();
+            long processedBytes = 0;
+
+            while ((read = fis.read(buffer)) != -1) {
+                for (int i = 0; i < read; i++) {
+                    buffer[i] = (byte) ~buffer[i];  // Simple XOR decryption
+                }
+                fos.write(buffer, 0, read);
+
+                processedBytes += read;
+                updateProgress(processedBytes, totalBytes);
+            }
+        }
+
+        if (!source.delete()) {
+            throw new IOException("Failed to delete the encrypted file");
+        }
+
+        prgProgress.setVisible(false);
+    }
+
 
 }
