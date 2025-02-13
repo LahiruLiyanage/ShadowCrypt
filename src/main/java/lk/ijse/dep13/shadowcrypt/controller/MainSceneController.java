@@ -130,5 +130,35 @@ public class MainSceneController {
         prgProgress.setVisible(false);
     }
 
+    private boolean validateInputs() {
+        if (txtFilePath.getText().isEmpty()) {
+            showAlert("Error", "Please select a file!");
+            return false;
+        }
+        if (txtPassword.getText().isEmpty()) {
+            showAlert("Error", "Please enter a password!");
+            return false;
+        }
+        return true;
+    }
 
+    private void updateProgress(long processed, long total) {
+        double progress = (double) processed / total;
+        prgProgress.setProgress(progress);
+    }
+
+    private void showAlert(String title, String content) {
+        Alert alert = new Alert(Alert.AlertType.INFORMATION);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    private void clearFields() {
+        txtFilePath.clear();
+        txtPassword.clear();
+        prgProgress.setProgress(0);
+        prgProgress.setVisible(false);
+    }
 }
