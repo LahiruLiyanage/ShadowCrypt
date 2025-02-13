@@ -11,11 +11,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.dep13.shadowcrypt.controller.MainSceneController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" styleClass="container" stylesheets="@../style/MainScene.css" xmlns="http://javafx.com/javafx/23.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="lk.ijse.dep13.shadowcrypt.controller.MainSceneController">
 
     <VBox fillWidth="false" spacing="15" style="-fx-background-color: #f4f4f4;" AnchorPane.leftAnchor="20.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
 
-        <Label alignment="CENTER" prefHeight="64.0" prefWidth="560.0" style="-fx-font-size: 24px; -fx-font-weight: bold;" text="ShadowCrypt File Encryption">
+        <Label alignment="CENTER" prefHeight="64.0" prefWidth="560.0" style="-fx-font-size: 30px; -fx-font-weight: bold;" text="ShadowCrypt File Encryption">
          <font>
             <Font size="16.0" />
          </font></Label>
@@ -23,11 +23,11 @@
         <VBox prefHeight="51.0" prefWidth="540.0" spacing="5">
             <Label text="Select File:">
             <font>
-               <Font size="16.0" />
+               <Font size="20.0" />
             </font></Label>
             <HBox alignment="CENTER" prefHeight="39.0" prefWidth="540.0" spacing="10">
-                <TextField fx:id="txtFilePath" editable="false" prefHeight="30.0" prefWidth="463.0" promptText="No file selected" />
-                <Button fx:id="btnBrowse" onAction="#btnBrowseOnAction" prefHeight="30.0" prefWidth="120.0" text="Browse">
+                <TextField fx:id="txtFilePath" editable="false" prefHeight="30.0" prefWidth="463.0" promptText="No file selected" stylesheets="@../style/MainScene.css" />
+                <Button fx:id="btnBrowse" onAction="#btnBrowseOnAction" prefHeight="30.0" prefWidth="120.0" styleClass="Button" text="Browse">
                <font>
                   <Font size="16.0" />
                </font></Button>
@@ -37,17 +37,17 @@
         <VBox spacing="5">
             <Label text="Password:">
             <font>
-               <Font size="16.0" />
+               <Font size="20.0" />
             </font></Label>
-            <PasswordField fx:id="txtPassword" prefHeight="30.0" prefWidth="564.0" promptText="Enter password" />
+            <PasswordField fx:id="txtPassword" prefHeight="30.0" prefWidth="564.0" promptText="Enter password" stylesheets="@../style/MainScene.css" />
         </VBox>
 
         <HBox alignment="CENTER" prefHeight="75.0" prefWidth="560.0" spacing="50.0">
-            <Button fx:id="btnEncrypt" onAction="#btnEncryptOnAction" prefHeight="50.0" prefWidth="150" styleClass="button-success" text="Encrypt File">
+            <Button fx:id="btnEncrypt" onAction="#btnEncryptOnAction" prefHeight="50.0" prefWidth="150" styleClass="Button" text="Encrypt File">
             <font>
                <Font name="System Bold" size="16.0" />
             </font></Button>
-            <Button fx:id="btnDecrypt" onAction="#btnDecryptOnAction" prefHeight="50.0" prefWidth="150" styleClass="button-primary" text="Decrypt File">
+            <Button fx:id="btnDecrypt" onAction="#btnDecryptOnAction" prefHeight="50.0" prefWidth="150" styleClass="Button" text="Decrypt File">
             <font>
                <Font name="System Bold" size="16.0" />
             </font></Button>

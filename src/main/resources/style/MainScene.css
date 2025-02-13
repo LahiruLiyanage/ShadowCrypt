@@ -1,0 +1,38 @@
+.Button {
+    -fx-background-color: linear-gradient(to right, #343435, #616161);
+    -fx-effect: dropshadow(three-pass-box, #AAAAAA, 3, 0, 0, 3);
+    -fx-pref-width: 220;
+    -fx-font-size: 1.5em;
+    -fx-font-family: "Calibri Light";
+    -fx-text-fill: #FFFFFF;
+}
+.Button:hover {
+    -fx-effect: dropshadow(three-pass-box, #AAAAAA, 3, 0, 0, 3);
+    -fx-cursor: hand;
+    -fx-font-scale: 1.5em;
+}
+
+.container TextField {
+    -fx-pref-height: 40;
+    -fx-background-color: #FFFFFF;
+    -fx-font-family: "Calibri Light";
+    -fx-effect: dropshadow(three-pass-box, #AAAAAA, 3, 0, 0, 3);
+}
+
+.container TextField:focused{
+    -fx-border-color: #AAAAAA;
+    -fx-border-radius: 2px;
+    -fx-effect: dropshadow(three-pass-box, rgba(122, 122, 122, 0.69), 3, 0, 0, 3);
+}
+
+.container PasswordField {
+    -fx-pref-height: 40;
+    -fx-background-color: #FFFFFF;
+    -fx-effect: dropshadow(three-pass-box, #AAAAAA, 3, 0, 0, 3);
+}
+
+.container PasswordField:focused {
+    -fx-border-color: #AAAAAA;
+    -fx-border-radius: 2px;
+    -fx-effect: dropshadow(three-pass-box, rgba(122, 122, 122, 0.69), 3, 0, 0, 3);
+}
