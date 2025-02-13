@@ -2,8 +2,13 @@ package lk.ijse.dep13.shadowcrypt.controller;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.*;
-import javafx.stage.FileChooser;
+import javafx.stage.DirectoryChooser;
 import java.io.*;
+import java.nio.ByteBuffer;
+import java.nio.channels.FileChannel;
+import java.nio.file.*;
+import java.nio.file.attribute.BasicFileAttributes;
+import java.util.concurrent.atomic.AtomicLong;
 
 public class MainSceneController {
     public Button btnBrowse;
@@ -14,129 +19,175 @@ public class MainSceneController {
     public TextField txtFilePath;
     public PasswordField txtPassword;
 
+    private volatile boolean isProcessing = false;
+
     public void btnBrowseOnAction(ActionEvent event) {
-        FileChooser fileChooser = new FileChooser();
-        fileChooser.setTitle("Select File");
-        File file = fileChooser.showOpenDialog(btnBrowse.getScene().getWindow());
-        if (file != null) {
-            txtFilePath.setText(file.getAbsolutePath());
+        DirectoryChooser directoryChooser = new DirectoryChooser();
+        directoryChooser.setTitle("Select Directory");
+        File directory = directoryChooser.showDialog(btnBrowse.getScene().getWindow());
+        if (directory != null) {
+            txtFilePath.setText(directory.getAbsolutePath());
         }
     }
 
     public void btnDecryptOnAction(ActionEvent event) {
         if (!validateInputs()) return;
-
-        File sourceFile = new File(txtFilePath.getText());
-        if (!sourceFile.getName().endsWith(".encrypted")) {
-            showAlert("Error", "Selected file is not an encrypted file!");
+        if (isProcessing) {
+            showAlert("Warning", "A process is already running!");
             return;
         }
 
         try {
-            decrypt(sourceFile, txtPassword.getText());
-            showAlert("Success", "File decrypted successfully!");
+            isProcessing = true;
+            processDirectory(Paths.get(txtFilePath.getText()), true);
+            showAlert("Success", "Directory decrypted successfully!");
             clearFields();
-        } catch (IOException e) {
-            showAlert("Error", "Failed to decrypt file: " + e.getMessage());
+        } catch (Exception e) {
+            showAlert("Error", "Failed to decrypt directory: " + e.getMessage());
+        } finally {
+            isProcessing = false;
         }
     }
 
     public void btnEncryptOnAction(ActionEvent event) {
         if (!validateInputs()) return;
-
-        File sourceFile = new File(txtFilePath.getText());
-        if (sourceFile.getName().endsWith(".encrypted")) {
-            showAlert("Error", "File is already encrypted!");
+        if (isProcessing) {
+            showAlert("Warning", "A process is already running!");
             return;
         }
 
         try {
-            encrypt(sourceFile, txtPassword.getText());
-            showAlert("Success", "File encrypted successfully!");
+            isProcessing = true;
+            processDirectory(Paths.get(txtFilePath.getText()), false);
+            showAlert("Success", "Directory encrypted successfully!");
             clearFields();
-        } catch (IOException e) {
-            showAlert("Error", "Failed to encrypt file: " + e.getMessage());
+        } catch (Exception e) {
+            showAlert("Error", "Failed to encrypt directory: " + e.getMessage());
+        } finally {
+            isProcessing = false;
         }
     }
 
-    private void encrypt(File source, String password) throws IOException {
-        File target = new File(source.getParent(), source.getName() + ".encrypted");
+    private void processDirectory(Path directory, boolean isDecrypting) throws IOException {
+        // First, calculate total size for progress tracking
+        AtomicLong totalSize = new AtomicLong(0);
+        AtomicLong processedSize = new AtomicLong(0);
+
+        // Count total size
+        Files.walkFileTree(directory, new SimpleFileVisitor<>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) {
+                String fileName = file.toString();
+                if (isDecrypting && fileName.endsWith(".encrypted")) {
+                    totalSize.addAndGet(attrs.size());
+                } else if (!isDecrypting && !fileName.endsWith(".encrypted")) {
+                    totalSize.addAndGet(attrs.size());
+                }
+                return FileVisitResult.CONTINUE;
+            }
+        });
+
+        // Process files
+        Files.walkFileTree(directory, new SimpleFileVisitor<>() {
+            @Override
+            public FileVisitResult visitFile(Path file, BasicFileAttributes attrs) throws IOException {
+                String fileName = file.toString();
+                if (isDecrypting && fileName.endsWith(".encrypted")) {
+                    decrypt(file.toFile(), txtPassword.getText(), processedSize, totalSize);
+                } else if (!isDecrypting && !fileName.endsWith(".encrypted")) {
+                    encrypt(file.toFile(), txtPassword.getText(), processedSize, totalSize);
+                }
+                return FileVisitResult.CONTINUE;
+            }
+        });
+    }
+
+    private void encrypt(File source, String password, AtomicLong processedSize, AtomicLong totalSize) throws IOException {
+        Path target = Paths.get(source.getParent(), source.getName() + ".encrypted");
         prgProgress.setVisible(true);
 
-        try (FileInputStream fis = new FileInputStream(source);
-             FileOutputStream fos = new FileOutputStream(target)) {
+        try (FileChannel sourceChannel = FileChannel.open(source.toPath(), StandardOpenOption.READ);
+             FileChannel targetChannel = FileChannel.open(target,
+                     StandardOpenOption.CREATE, StandardOpenOption.WRITE)) {
 
             // Write password as signature
-            fos.write(password.getBytes());
+            ByteBuffer passwordBuffer = ByteBuffer.wrap(password.getBytes());
+            targetChannel.write(passwordBuffer);
 
-            byte[] buffer = new byte[1024];
-            int read;
-            long totalBytes = source.length();
-            long processedBytes = 0;
+            // Process file content
+            ByteBuffer buffer = ByteBuffer.allocateDirect(8192); // Using direct buffer for better performance
+            while (sourceChannel.read(buffer) != -1) {
+                buffer.flip();
+                byte[] array = new byte[buffer.remaining()];
+                buffer.get(array);
 
-            while ((read = fis.read(buffer)) != -1) {
-                for (int i = 0; i < read; i++) {
-                    buffer[i] = (byte) ~buffer[i];  // Simple XOR encryption
+                // Encrypt the bytes
+                for (int i = 0; i < array.length; i++) {
+                    array[i] = (byte) ~array[i];
                 }
-                fos.write(buffer, 0, read);
 
-                processedBytes += read;
-                updateProgress(processedBytes, totalBytes);
+                targetChannel.write(ByteBuffer.wrap(array));
+                processedSize.addAndGet(array.length);
+                updateProgress(processedSize.get(), totalSize.get());
+
+                buffer.clear();
             }
         }
 
-        if (!source.delete()) {
-            throw new IOException("Failed to delete the original file");
-        }
-
-        prgProgress.setVisible(false);
+        Files.delete(source.toPath());
     }
 
-    private void decrypt(File source, String password) throws IOException {
-        String decryptedName = source.getName().replace(".encrypted", "");
-        File target = new File(source.getParent(), decryptedName);
+    private void decrypt(File source, String password, AtomicLong processedSize, AtomicLong totalSize) throws IOException {
+        Path target = Paths.get(source.getParent(), source.getName().replace(".encrypted", ""));
         prgProgress.setVisible(true);
 
-        try (FileInputStream fis = new FileInputStream(source);
-             FileOutputStream fos = new FileOutputStream(target)) {
+        try (FileChannel sourceChannel = FileChannel.open(source.toPath(), StandardOpenOption.READ);
+             FileChannel targetChannel = FileChannel.open(target,
+                     StandardOpenOption.CREATE, StandardOpenOption.WRITE)) {
 
-            // Read and verify password
+            // Verify password
             byte[] storedPassword = new byte[password.length()];
-            if (fis.read(storedPassword) != password.length() ||
-                    !password.equals(new String(storedPassword))) {
+            ByteBuffer passwordBuffer = ByteBuffer.wrap(storedPassword);
+            sourceChannel.read(passwordBuffer);
+            if (!password.equals(new String(storedPassword))) {
                 throw new IOException("Invalid password!");
             }
 
-            byte[] buffer = new byte[1024];
-            int read;
-            long totalBytes = source.length() - password.length();
-            long processedBytes = 0;
+            // Process file content
+            ByteBuffer buffer = ByteBuffer.allocateDirect(8192);
+            while (sourceChannel.read(buffer) != -1) {
+                buffer.flip();
+                byte[] array = new byte[buffer.remaining()];
+                buffer.get(array);
 
-            while ((read = fis.read(buffer)) != -1) {
-                for (int i = 0; i < read; i++) {
-                    buffer[i] = (byte) ~buffer[i];  // Simple XOR decryption
+                // Decrypt the bytes
+                for (int i = 0; i < array.length; i++) {
+                    array[i] = (byte) ~array[i];
                 }
-                fos.write(buffer, 0, read);
 
-                processedBytes += read;
-                updateProgress(processedBytes, totalBytes);
+                targetChannel.write(ByteBuffer.wrap(array));
+                processedSize.addAndGet(array.length);
+                updateProgress(processedSize.get(), totalSize.get());
+
+                buffer.clear();
             }
         }
 
-        if (!source.delete()) {
-            throw new IOException("Failed to delete the encrypted file");
-        }
-
-        prgProgress.setVisible(false);
+        Files.delete(source.toPath());
     }
 
     private boolean validateInputs() {
         if (txtFilePath.getText().isEmpty()) {
-            showAlert("Error", "Please select a file!");
+            showAlert("Error", "Please select a directory!");
             return false;
         }
         if (txtPassword.getText().isEmpty()) {
             showAlert("Error", "Please enter a password!");
+            return false;
+        }
+        File dir = new File(txtFilePath.getText());
+        if (!dir.exists() || !dir.isDirectory()) {
+            showAlert("Error", "Selected path is not a valid directory!");
             return false;
         }
         return true;
