@@ -11,7 +11,26 @@ ShadowCrypt is an automated file encryption tool that secures sensitive data by 
 - **Automated Encryption** – Encrypts files within chosen directories.
 - **Seamless Decryption** – Restore encrypted files securely.
 - **Efficient Performance** – Lightweight implementation with optimized processing.
+- **NIO Processing** – Utilizes Java NIO for high-performance file operations.
 - **Open-Source** – Modify and enhance as needed!
+
+## 🛠️ Technologies Used
+
+### Core Technologies
+- **Java 11** – Core programming language
+- **JavaFX** – GUI framework for the user interface
+- **CSS** – Styling for the JavaFX components
+
+### Key Libraries & APIs
+- **Java NIO** – For efficient file operations and directory traversal
+- **FileChannel** – High-performance file I/O operations
+- **ByteBuffer** – Direct buffer implementation for optimized data transfer
+- **Path API** – Modern file system navigation and manipulation
+
+### Development Tools
+- **Maven** – Project management and build tool
+- **Scene Builder** – Visual layout tool for JavaFX
+- **Git** – Version control system
 
 ## 📸 Screenshots
 
@@ -24,29 +43,37 @@ ShadowCrypt is an automated file encryption tool that secures sensitive data by 
 3. **Decryption Process** – Users can restore files by providing the correct password.
 4. **File Management** – The original files are securely deleted after encryption.
 
+### Technical Implementation
+- Uses Java NIO's `FileChannel` for efficient file operations
+- Implements `ByteBuffer` for optimized data transfer
+- Utilizes `Files.walkFileTree()` for recursive directory processing
+- Employs atomic operations for thread-safe progress tracking
+- Implements custom encryption algorithm with password verification
+
 ## 🛠️ Installation & Usage
 
 ### Prerequisites
-- Java (JDK 8 or higher)
-- JavaFX (for UI implementation)
+- Java 11 or higher
+- JavaFX SDK
+- Maven (for building)
 
 ### Running the Application
 
 ```sh
-javac main/m/ShadowCryptUI.java
-java main.m.ShadowCryptUI
+mvn clean install
+mvn javafx:run
 ```
 
 ### Folder Structure
 ```
 shadow-crypt/
 │── src/
-│   │── main
-│   │     │──java
-│   │     └──resources
-│   └── test
-│── files/  # Place files here to encrypt
-│── README.md
+│   │── main/
+│   │     │── java/
+│   │     └── resources/
+│   └── test/
+├── pom.xml
+├── README.md
 └── LICENCE.txt
 ```
 
@@ -54,9 +81,12 @@ shadow-crypt/
 This tool is intended for educational and personal security purposes only. Use it responsibly and do not apply it to unauthorized systems.
 
 ## 📌 Future Enhancements
-- Implement **AES encryption** for stronger security.
-- Add **progress indicators** for encryption/decryption processes.
-- Enhance **UI design** for better user experience.
+- Implement **AES encryption** for stronger security
+- Add **multi-threading** support for parallel processing
+- Enhance **UI design** with modern JavaFX controls
+- Add **file filtering** options
+- Implement **compression** before encryption
+- Add **backup** functionality
 
 ## 🤝 Contributing
 Feel free to fork this repository and improve its capabilities. PRs are welcome!
