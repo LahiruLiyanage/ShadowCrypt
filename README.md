@@ -13,6 +13,10 @@ ShadowCrypt is an automated file encryption tool that secures sensitive data by 
 - **Efficient Performance** – Lightweight implementation with optimized processing.
 - **Open-Source** – Modify and enhance as needed!
 
+## 📸 Screenshots
+
+![Screenshot 1](assets/Encrypted.png) ![Screenshot 2](assets/Decrypted.png)
+
 ## 🔧 How It Works
 
 1. **User Selection** – Choose a folder through the graphical interface.
@@ -35,12 +39,15 @@ java main.m.ShadowCryptUI
 
 ### Folder Structure
 ```
-ShadowCrypt/
+shadow-crypt/
 │── src/
-│   │── main/m/ShadowCryptUI.java
-│   └── main/m/ShadowCryptUI.java
-│── target/  # Place files here to encrypt
+│   │── main
+│   │     │──java
+│   │     └──resources
+│   └── test
+│── files/  # Place files here to encrypt
 │── README.md
+└── LICENCE.txt
 ```
 
 ## ⚠️ Disclaimer
