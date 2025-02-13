@@ -5,10 +5,68 @@
 <?import javafx.scene.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
 
 <AnchorPane xmlns="http://javafx.com/javafx"
             xmlns:fx="http://javafx.com/fxml"
             fx:controller="lk.ijse.dep13.shadowcrypt.controller.MainSceneController"
             prefHeight="400.0" prefWidth="600.0">
 
+    <VBox spacing="15"
+          AnchorPane.topAnchor="20.0"
+          AnchorPane.leftAnchor="20.0"
+          AnchorPane.rightAnchor="20.0"
+          style="-fx-background-color: #f4f4f4;">
+
+        <Label text="ShadowCrypt File Encryption"
+               style="-fx-font-size: 24px; -fx-font-weight: bold;"/>
+
+        <VBox spacing="5">
+            <Label text="Select File:"/>
+            <HBox spacing="10">
+                <TextField fx:id="txtFilePath"
+                           prefWidth="430"
+                           editable="false"
+                           promptText="No file selected"/>
+                <Button fx:id="btnBrowse"
+                        text="Browse"
+                        onAction="#btnBrowseOnAction"/>
+            </HBox>
+        </VBox>
+
+        <VBox spacing="5">
+            <Label text="Password:"/>
+            <PasswordField fx:id="txtPassword"
+                           promptText="Enter password"/>
+        </VBox>
+
+        <VBox spacing="5">
+            <Label text="Confirm Password:"/>
+            <PasswordField fx:id="txtConfirmPassword"
+                           promptText="Confirm password"/>
+        </VBox>
+
+        <HBox spacing="10" alignment="CENTER">
+            <Button fx:id="btnEncrypt"
+                    text="Encrypt File"
+                    prefWidth="150"
+                    styleClass="button-success"
+                    onAction="#btnEncryptOnAction"/>
+            <Button fx:id="btnDecrypt"
+                    text="Decrypt File"
+                    prefWidth="150"
+                    styleClass="button-primary"
+                    onAction="#btnDecryptOnAction"/>
+        </HBox>
+
+        <ProgressBar fx:id="prgProgress"
+                     progress="0.0"
+                     visible="false"
+                     prefWidth="Infinity"/>
+
+        <Label fx:id="lblStatus"
+               wrapText="true"
+               style="-fx-text-fill: #666;"/>
+
+    </VBox>
 </AnchorPane>
