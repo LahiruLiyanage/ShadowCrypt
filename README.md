@@ -34,7 +34,20 @@ ShadowCrypt is an automated file encryption tool that secures sensitive data by 
 
 ## 📸 Screenshots
 
-![Screenshot 0](assets/shadow-crypt.png) ![Screenshot 1](assets/Encrypted.png) ![Screenshot 2](assets/Decrypted.png)
+<table>
+  <tr>
+    <td><img src="assets/shadow-crypt.png" alt="Main Interface" width="100%"></td>
+    <td><img src="assets/Encrypted.png" alt="Encryption" width="100%"></td>
+    <td><img src="assets/Decrypted.png" alt="Decryption" width="100%"></td>
+    <td><img src="assets/shadow-crypt-invalid.png" alt="Invalid" width="100%"></td>
+  </tr>
+  <tr>
+    <td align="center"><b>Main Interface</b></td>
+    <td align="center"><b>Encryption Process</b></td>
+    <td align="center"><b>Decryption Process</b></td>
+    <td align="center"><b>Invalid Credentials</b></td>
+  </tr>
+</table>
 
 ## 🔧 How It Works
 
